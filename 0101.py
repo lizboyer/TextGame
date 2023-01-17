@@ -1,185 +1,186 @@
-import math
-import numpy as np
+##Levels
+class Housetut:
 
-class Game:
+    def __init__(self, game):
+        self.game = game
+        self.desc = "You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it, as well as a keyring. The door is cracked."
+        self.loot = ["keys"]
+        self.places_to_go = []
+        self.things_to_see = ["wallpaper", "dresser","frames","keys"]
+        self.interactables = {"keys":"door"}
 
-    ST = 0
-    IN = 0
-    DX = 0 
-    CO = 0
-    WI = 0
-    CH = 0
-    total_stat = 0
-    location = 'none'
-    inv_idx = []
-
-    def __init__(self):
-        self.value = 0
-
-
-    def House(self, inventory_index):
+    def StartLevel(self):
         while True:
-        #    location = input("type house")
-        #    location = "house"
-            location = "house"
             print("You wake up, coughing. Your throat is dry. As you open your eyes, you notice your surroundings. \n")
             print("Type 'Look' to look around. \n")
-            Inputs_Ctrl(inventory_index, location)
+            self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
             print("Type 'Take' and 'Keys' to take the keys.\n")
-            print(inventory_index)
-            Inputs_Ctrl(inventory_index, location)
-            print(location)
+            #print(game.self.inv) #how to print this?
+            self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
             print("Type 'Inventory' to see what you're carrying.")
-            print(inv_idx)
-            Inputs_Ctrl(inv_idx, location)
+            self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
             print("Good.")
-        
+            print(self.game.inv)
+            self.game.goTo("house")
+            # x = input()
+            # if x == 'Look'
 
-    def Inputs_Ctrl(self, inventory_index, location_string):
-    #    print("Hit input control")
-        inputs = input(": ")
-        if (inputs == "Look"):
-    #        print("Going to look")
-            Look(location_string)
-        elif (inputs == 'Take'):
-            Take(inventory_index, location_string)
-        elif (inputs == 'Inventory'):
-            Inventory(inventory_index)
-    #    elif inputs = "
+            #print("You wake up, coughing. Your throat is dry. As you open your eyes, you notice your surroundings. \n")
+            #print('you check your inventory')
+            #cur_inv = self.game.Inventory()
+            #print(cur_inv)
 
-    def Look(self, location_string):
-        print("Looking")
-        if (location_string == "house"):
-            print("looked")
-            print("You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it, as well as a keyring. The door is cracked.")
-
-    def Take(self, inventory_index, location_string):
-    #    print("Taking")
-        input_take = input("Take what?\n: ")
-        if (location_string == 'house'):
-            if (input_take == ('Keys' or 'keys')):
-                Add(inventory_index,"Keys")
-                
-                
-                
-
-    def Inventory(self, inventory_index):
-        print(inventory_index)
-
-    def Add(inventory_index,add_string):
-        print("adding")
-        inventory_index = np.append(inventory_index,add_string)
-    #    inv_idx = inv_idx2
-        print(inventory_index)
+            #print('you pick up a key')
+            #self.game.addItem('key')
+            #print('you check your inventory')
+            #cur_inv = self.game.Inventory()
+            #print(cur_inv)
 
 
-    def Stat_List(self):
-        CH_str = str(CH)
-        ST_str = str(ST)
-        IN_str = str(IN)
-        CO_str = str(CO)
-        DX_str = str(DX)
-        WI_str = str(WI)
-        print("Here are your stats:\n")
-        print("Charisma: " + CH_str + "\nStrength: " + ST_str + "\nIntelligence: " + IN_str + "\nConstitution: " + CO_str + "\nDexterity: " + DX_str + "\nWisdom: " + WI_str)
-        
-    if __name__ == "__main__":
+            # 
+            # 
+            # loot_taken, thing_used = takeaction(loot, places_to_go)
+            # if thing_used == 'key' => places_to_go.append('other room'), loot = []
+
+            # self.game.takeaction(loot, opalces)
+
+            # x = input()
+            # if x == run 
+
+
+        # self.game.goTo('stairs')
+
+class House:
+    def __init__(self, game):
+        self.game = game
+        self.desc = "You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it, as well as a keyring. The door is cracked."
+        self.loot = []
+        self.places_to_go = []
+        self.things_to_see = {"wallpaper":"The wallpaper that was once ornate is now peeling off the wall, revealing the crumbling drywall behind.", "dresser":"The drawers are empty, though there is no dust inside.","frames":"The photos in the frames are of a child, and a parent with their face burnt out.","keys":"The keys are on a ring. There is a large old key, seemingly to a chest, and a smaller door key."}
+        self.interactables = {"keys":"door"}
+
+    def StartLevel(self):
         while True:
-            char = True
-            stren = True
-            intel = True
-            const = True
-            dext = True
-            wisd = True
-            location = "intro"
-            inputs = "intro"
+            #print(self.game.inv)
+            game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
+            if self.game.message == "Used key on door.":
+                self.places_to_go.append("door")
+
+class OutsideHouse:
+
+    def __init__(self, game):
+        self.game = game
+        self.loot = []
+        self.places_to_go = []
 
 
-            name = input("Welcome to TextGame! What's your name?\n")
-            print(name + ", got it. Before we start, I'd like to ask you a few questions. \nAnswer them on a scale from 0-5.\n")
+##Mechanics, Starting
+class Game:
 
-            while(char == True):
-                CH = int(input("Are you good at making new friends? ")) #charisma
-                if(CH < 0 or CH > 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    char = False
-            total_stat = CH
-                #CH = CH * .1
+    def __init__(self, startingLoc):
+        self.inv = []
+        self.boards = {}
+        self.startingLoc = startingLoc
+        self.message = ''
 
-            while(stren == True):
-                ST = int(input("Do you work out often? ")) #strength
-                if(ST < 0 or ST> 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    stren = False
-            total_stat = total_stat + ST
-                #ST = ST * .1
+    def Inventory(self):
+        return self.inv
 
-            while(intel == True):
-                IN = int(input("Do you enjoy acadamia? ")) #intellegence
-                if(IN < 0 or IN> 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    intel = False
-            total_stat = total_stat + IN
-                #IN = IN * .1
+    def addItem(self, add_string):
+        self.inv.append(add_string)
 
-            while(const == True):
-                CO = int(input("Can you take a punch? ")) #constitution
-                if(CO < 0 or CO> 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    const = False
-            total_stat = total_stat + CO
-                #CO = CO * .1
+    def addLevel(self, loc_string, location):
+        self.boards[loc_string] = location
 
-            while(dext == True):
-                DX = int(input("Would you describe yourself as stealthy? ")) #dexterity
-                if(DX < 0 or DX> 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    dext = False
-            total_stat = total_stat + DX
-                #DX = DX * .1
+    def goTo(self, loc_string):
+        self.boards[loc_string].StartLevel()
 
-            while(wisd == True):
-                WI = int(input("Do you find yourself to have good decision making skills? ")) #wisdom
-                if(WI < 0 or WI> 5):
-                    print("That isn't in the range, try again.\n")
-                else:
-                    wisd = False
-            total_stat = total_stat + WI
-                #WI = WI * .1
+    def StartGame(self):
+        #get stats
+        #print("Starting game\n")
+        #print(self.startingLoc)
+        #print(self.boards)
+        self.goTo(self.startingLoc)
 
+    def takeAction(self, desc, things_to_see, places_to_go,loot,interactables):
+        player_input = input(": ")
+        # print(player_input)
+        # print(loot)
+        if player_input == "look" or player_input == "Look":
+            print(desc)
 
-            CH = (CH / total_stat) * 100
-            ST = (ST / total_stat) * 100
-            IN = (IN / total_stat) * 100
-            CO = (CO / total_stat) * 100
-            DX = (DX / total_stat) * 100
-            WI = (WI / total_stat) * 100
+        elif player_input == "inspect" or player_input == "Inspect":
+            subject = input("Inspect what?\n: ")
+            if subject in(things_to_see):
+                #print(the item desc)
+                print("yes")
+            else:
+                print("I don't see " +subject+ " in here...")
 
-            CH_str = str(CH)
-            ST_str = str(ST)
-            IN_str = str(IN)
-            CO_str = str(CO)
-            DX_str = str(DX)
-            WI_str = str(WI)
+        elif player_input == "move" or player_input == "Move":
+            destination = input("Move where?\n: ")
+            if destination in(places_to_go):
+                self.goTo(destination) #check this
+            else:
+                print("I can't go to " +destination+ "...")
 
-            #stat_idx = [CH,ST,IN,CO,DX,WI]
-
-            print("Here are your stats:\n")
-            print("Charisma: " + CH_str + "\nStrength: " + ST_str + "\nIntelligence: " + IN_str + "\nConstitution: " + CO_str + "\nDexterity: " + DX_str + "\nWisdom: " + WI_str)
-            #print(stat_idx)
-
-            print("Let's begin.\n")
-
+        elif player_input == "take" or player_input == "Take":
+            take_obj = input("Take what?\n: ")
+            print(take_obj)
+            if (take_obj.lower() in(loot)) or (take_obj.lower()+"s" in (loot)):
+                self.addItem(take_obj.lower()) #check this
+            else:
+                print("I cant take " +take_obj+ "...")
+        elif player_input == "Inventory" or player_input == "inventory":
+            print(self.Inventory())
             
-        #    inv_idx = []
-        #    location = "house"
-            Test2 = House(inv_idx)
-            Test2.House(inv_idx)
+        elif player_input == "Use" or player_input == "use":
+            use_obj = input("Use what?\n: ")
+            if (use_obj.lower() in(self.inv)):
+                use_on_obj = input("Use " +use_obj+ " on what?")
+                if use_on_obj.lower() in(interactables[use_obj.lower()]):
+                    self.message = "Used " +use_obj+ " on " +use_on_obj+ "."
+                    print(self.message)
+                else:
+                    print("I cant use that here...")
+            else:
+                print("I don't seem to have " +use_obj+"...")
 
-Test = Game()
-Test.House()
+        else:
+            print("I don't understand. Try 'Look,' 'Inspect,' 'Move,' 'Take,' 'Inventory,' or 'Use'")
+
+
+
+
+
+
+if __name__ == "__main__":
+    game = Game('housetut')
+
+    housetut = Housetut(game)
+    house = House(game)
+    # stairs = Stairs(game)
+
+    game.addLevel('housetut', housetut)
+    game.addLevel('house',house)
+    # game.addLevel(stairs, 'stairs')
+
+    game.StartGame()
+
+
+
+"""
+
+
+def take_action(loot, places to go, things to see, description):
+    input()
+
+    if look => print description
+    if inspect => if in things to see, print description (picking from dictionary)
+    if move => if in places to go, self.goTo(place)
+    if take => if in loot, add to inventory, then return thing taken
+    if use => return thing used
+
+    return action, loot_taken, things_used
+
+"""
