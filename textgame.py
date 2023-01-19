@@ -115,16 +115,16 @@ class Housetut:
     def __init__(self, game):
         self.game = game
         self.desc = "You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it, as well as a keyring. There is a door on one wall."
-        self.loot = ["key"]
+        self.loot = ["keys"]
         self.places_to_go = []
         self.things_to_see = {
             "wallpaper":"The wallpaper that was once ornate is now peeling off the wall, revealing the crumbling drywall behind.",
             "dresser":"The drawers are empty, though there is no dust inside.",
             "frames":"The photos in the frames are of a child, and a parent with their face burnt out.",
-            "key":"The keys are on a ring. There is a large old key, seemingly to a chest, and a smaller door key.",
+            "keys":"The keys are on a ring. There is a large old key, seemingly to a chest, and a smaller door key.",
             "door" : "The door is locked"
         }
-        self.interactables = {"key":"door"}
+        self.interactables = {"keys":"door"}
 
     def StartLevel(self):
         while True:
@@ -132,7 +132,6 @@ class Housetut:
             print("Type 'Look' to look around. \n")
             self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
             print("Type 'Take' and 'Keys' to take the keys.\n")
-            #print(game.self.inv) #how to print this?
             self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
             print("Type 'Inventory' to see what you're carrying.")
             self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
@@ -180,16 +179,15 @@ class House:
             "keys":"The keys are on a ring. There is a large old key, seemingly to a chest, and a smaller door key.",
             "door" : "The door is locked"
         }
-        self.interactables = {"key":"door"}
+        self.interactables = {"keys":"door"}
 
     def StartLevel(self):
         while True:
-            #print(self.game.inv)
             self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
-            if self.game.message == "Used key on door.":
+            if self.game.message == "Used keys on door." or self.game.message == "Used Keys on Door.":
                 self.places_to_go["north"] = 'livingroom'
                 self.things_to_see["door"] = "The door is unlocked"
-                self.desc = "You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it, as well as a keyring. The door to the north is unlocked."
+                self.desc = "You are in a derelict house. There is peeling wallpaper on each wall. A dresser sits in the corner, photo frames lined upon it. The door to the north is unlocked."
 
 class LivingRoom:
 
@@ -203,7 +201,7 @@ class LivingRoom:
             "trunk":"The trunk is plain black, and missing wheels. It's locked.",
             "door":"The door is unlocked.",
         }
-        self.interactables = {'key':'trunk'}
+        self.interactables = {'keys':'trunk'}
         self.trunktrigger = True
 
 
@@ -211,13 +209,14 @@ class LivingRoom:
         print(self.desc)
         while True:
             self.game.takeAction(self.desc, self.things_to_see, self.places_to_go, self.loot,self.interactables)
-            if self.game.message == "Used key on trunk." and self.trunktrigger == True:
-                self.things_to_see["trunk"] = "The trunk is open. It's nearly empty, save for a wallet and a letter."
-                self.things_to_see["wallet"] = "There is an ID card, $6 cash, and a Bath & Bodyworks gift card."
-                self.things_to_see["letter"] = "\nDear " +self.intro.name+ ",\nIf you found this, it means that XXX. If there's any hope, I'm at XXX."
-                self.desc = "You are in a living room. There is a couch with springs exposed, an unlocked trunk, and a door with light shining through the window to the west."
-                print(self.things_to_see["trunk"])
-                self.trunktrigger = False
+            if self.game.message == "Used keys on trunk." or self.game.message == "Used Keys on Trunk.":
+                if self.trunktrigger == True:
+                    self.things_to_see["trunk"] = "The trunk is open. It's nearly empty, save for a wallet and a letter."
+                    self.things_to_see["wallet"] = "There is an ID card, $6 cash, and a Bath & Bodyworks gift card."
+                    self.things_to_see["letter"] = "\nDear " +intro.name+ ",\nIf you found this, it means that XXX. If there's any hope, I'm at XXX."
+                    self.desc = "You are in a living room. There is a couch with springs exposed, an unlocked trunk, and a door with light shining through the window to the west."
+                    print(self.things_to_see["trunk"])
+                    self.trunktrigger = False
             #if self.game.message == ""
 
 
@@ -276,11 +275,11 @@ class Game:
 
         elif player_input.lower() == "take":
             take_obj = input("Take what?\n: ")
-            print(take_obj)
-            if (take_obj.lower() in(loot)) or (take_obj.lower()+"s" in (loot)):
-                self.addItem(take_obj.lower()) #check this
+            #print(take_obj)
+            if (take_obj.lower() in(loot)):
+                self.addItem(take_obj.lower()) 
                 loot.remove(take_obj.lower())
-                print(things_to_see[take_obj])
+                print(things_to_see[take_obj.lower()])
             else:
                 print("I cant take " +take_obj+ "...")
         elif player_input.lower() == "inventory":
@@ -289,7 +288,7 @@ class Game:
         elif player_input.lower() == "use":
             use_obj = input("Use what?\n: ")
             if (use_obj.lower() in(self.inv)):
-                use_on_obj = input("Use " +use_obj+ " on what?")
+                use_on_obj = input("Use " +use_obj+ " on what?\n")
                 if use_on_obj.lower() in(interactables[use_obj.lower()]) or use_on_obj.lower() in(interactables[use_obj.lower()+"s"]):
                     self.message = "Used " +use_obj+ " on " +use_on_obj+ "."
                     print(self.message)
@@ -300,12 +299,11 @@ class Game:
 
         else:
             print("I don't understand. Try 'Look,' 'Inspect,' 'Move,' 'Take,' 'Inventory,' or 'Use'")
+
+        return player_input, subject, direction, take_obj, use_obj, use_on_obj #Returns each input type
         
 
-
-
-
-
+#Loads Levels
 
 if __name__ == "__main__":
     game = Game('intro')
@@ -314,30 +312,10 @@ if __name__ == "__main__":
     housetut = Housetut(game)
     house = House(game)
     livingroom = LivingRoom(game)
-    # stairs = Stairs(game)
+
     game.addLevel('intro',intro)
     game.addLevel('housetut', housetut)
     game.addLevel('house',house)
     game.addLevel('livingroom',livingroom)
 
-    # game.addLevel(stairs, 'stairs')
-
     game.StartGame()
-
-
-
-"""
-
-
-def take_action(loot, places to go, things to see, description):
-    input()
-
-    if look => print description
-    if inspect => if in things to see, print description (picking from dictionary)
-    if move => if in places to go, self.goTo(place)
-    if take => if in loot, add to inventory, then return thing taken
-    if use => return thing used
-
-    return action, loot_taken, things_used
-
-"""
