@@ -1,3 +1,4 @@
 # TextGame
 
-A text-based adventure game.
+A text-based adventure game made in Python.
+
